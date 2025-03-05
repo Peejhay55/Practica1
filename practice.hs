@@ -4,7 +4,7 @@ import System.IO
 import Control.Exception
 import Control.Concurrent (threadDelay)
 import Data.Maybe (mapMaybe)
-import System.IO.Error (isDoesNotExistError)
+import System.IO.Error (isDoesNotExistError, isPermissionError)
 
 -- Definición del tipo de datos para representar la información de un estudiante
 data Estudiante = Estudiante {
@@ -123,7 +123,7 @@ cicloPrincipal institucion = do
             tiempoActual <- getCurrentTime
             let institucionActualizada = registrarIngreso matriculaEstudiante tiempoActual institucion
             putStrLn $ "Estudiante con matrícula " ++ matriculaEstudiante ++ " registrado."
-            guardarInstitucion institucionActualizada
+            guardarInstitucion (unlines (map mostrarEstudiante institucionActualizada))
             cicloPrincipal institucionActualizada
 
         "2" -> do
@@ -132,7 +132,7 @@ cicloPrincipal institucion = do
             tiempoActual <- getCurrentTime
             let institucionActualizada = registrarEgreso matriculaEstudiante tiempoActual institucion
             putStrLn $ "Estudiante con matrícula " ++ matriculaEstudiante ++ " egresó."
-            guardarInstitucion institucionActualizada
+            guardarInstitucion (unlines (map mostrarEstudiante institucionActualizada))
             cicloPrincipal institucionActualizada
 
         "3" -> do
